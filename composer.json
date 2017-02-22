@@ -1,0 +1,15 @@
+{
+    "name": "edentsai/leetcode-practices",
+    "description": "LeetCode Practices in PHP",
+    "keywords": ["LeetCode"],
+    "license": "proprietary",
+    "type": "project",
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Edentsai\\LeetCode\\": "src/"
+        }
+    }
+}
