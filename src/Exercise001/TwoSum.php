@@ -22,6 +22,19 @@ class TwoSum
      */
     public function solve(int $target, array $numbers) : array
     {
+        $lookup = [];
+        foreach ($numbers as $index => $number) {
+            $complement = $target - $number;
+            if (isset($lookup[$complement])) {
+                return [
+                    $lookup[$complement],
+                    $index,
+                ];
+            }
+
+            $lookup[$number] = $index;
+        }
+
         throw new InvalidArgumentException('No two sum solution.');
     }
 }

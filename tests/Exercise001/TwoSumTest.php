@@ -44,4 +44,38 @@ class TwoSumTest extends TestCase
 
         $twoSum->solve($target, $numbers);
     }
+
+    public function parametersDataProvider() : array
+    {
+        return [
+            [
+                'target' => 9,
+                'numbers' => [2, 7, 11, 15],
+                'expected' => [0, 1],
+            ],
+            [
+                'target' => 9,
+                'numbers' => [15, 11, 7, 2],
+                'expected' => [2, 3],
+            ],
+            [
+                'target' => 9,
+                'numbers' => [11, 2, 7, 15],
+                'expected' => [1, 2],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider parametersDataProvider
+     */
+    public function testTwoSumShouldReturnArrayWithAnswerWhenSolved(int $target, array $numbers, array $expected)
+    {
+        $twoSum = new TwoSum();
+
+        $this->assertSame(
+            $expected,
+            $twoSum->solve($target, $numbers)
+        );
+    }
 }
