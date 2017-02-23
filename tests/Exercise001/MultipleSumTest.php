@@ -128,4 +128,56 @@ class MultipleSumTest extends TestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testThreeSumShouldThrowInvalidArgumentExceptionWhenCannotBeSolved()
+    {
+        $amount = 3;
+        $target = 999;
+        $numbers = [15,7, 2, 11, 6];
+
+        $multipleSum = new MultipleSum();
+        $actual = $multipleSum->solve($amount, $target, $numbers);
+    }
+
+    public function threeSumDataProvider() : array
+    {
+        return [
+            [
+                'target' => 24,
+                'numbers' => [15, 7, 2, 11, 6],
+                'expected' => [0, 1, 2],
+            ],
+            [
+                'target' => 20,
+                'numbers' => [15, 7, 2, 11, 6],
+                'expected' => [1, 2, 3],
+            ],
+            [
+                'target' => 19,
+                'numbers' => [15, 7, 2, 11, 6],
+                'expected' => [2, 3, 4],
+            ],
+            [
+                'target' => 23,
+                'numbers' => [15, 7, 2, 11, 6],
+                'expected' => [0, 2, 4],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider threeSumDataProvider
+     */
+    public function testThreeSumShouldReturnArrayWithAnswerWhenSolved(int $target, array $numbers, array $expected)
+    {
+        $amount = 3;
+
+        $multipleSum = new MultipleSum();
+        $actual = $multipleSum->solve($amount, $target, $numbers);
+
+        $this->assertSame($expected, $actual);
+    }
 }
