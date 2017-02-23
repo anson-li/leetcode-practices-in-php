@@ -28,6 +28,9 @@
              target="php://stdout"
              showOnlySummary="true"/>
 
+        <log type="coverage-clover"
+             target="build/logs/clover.xml"/>
+
         <log type="coverage-html"
              target="build/coverage/public"
              charset="UTF-8"
