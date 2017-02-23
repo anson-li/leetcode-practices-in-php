@@ -32,4 +32,38 @@ class MultipleSumTest extends TestCase
         $multipleSum = new MultipleSum();
         $actual = $multipleSum->solve($amount, $target, $numbers);
     }
+
+    public function oneSumDataProvider() : array
+    {
+        return [
+            [
+                'target' => 5,
+                'numbers' => [1, 3, 5, 7],
+                'expected' => [2],
+            ],
+            [
+                'target' => 7,
+                'numbers' => [1, 3, 5, 7],
+                'expected' => [3],
+            ],
+            [
+                'target' => 1,
+                'numbers' => [1, 3, 5, 7],
+                'expected' => [0],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider oneSumDataProvider
+     */
+    public function testOneSumShouldReturnArrayWithAnswerWhenSolved(int $target, array $numbers, array $expected)
+    {
+        $amount = 1;
+
+        $multipleSum = new MultipleSum();
+        $actual = $multipleSum->solve($amount, $target, $numbers);
+
+        $this->assertSame($expected, $actual);
+    }
 }
