@@ -25,13 +25,16 @@ class MultipleSum
                 $remain['numbers'] = $numbers;
                 unset($remain['numbers'][$index]);
                 try {
-                    return array_merge(
-                        [$index],
-                        $this->solve($remain['amount'], $remain['target'], $remain['numbers'])
-                    );
+                    $remain['indexes'] = $this->solve($remain['amount'], $remain['target'], $remain['numbers']);
                 } catch (InvalidArgumentException $exception) {
+                    // No solution for the current number.
                     continue;
                 }
+
+                return array_merge(
+                    [$index],
+                    $remain['indexes']
+                );
             }
         } elseif (1 === $amount) {
             return $this->oneSum($target, $numbers);
