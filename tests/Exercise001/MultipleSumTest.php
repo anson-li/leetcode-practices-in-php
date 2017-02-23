@@ -180,4 +180,30 @@ class MultipleSumTest extends TestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFiveSumShouldThrowInvalidArgumentExceptionWhenCannotBeSolved()
+    {
+        $amount = 5;
+        $target = 999;
+        $numbers = [159, 3, 40, 10, 20, 5, 80, 1];
+
+        $multipleSum = new MultipleSum();
+        $actual = $multipleSum->solve($amount, $target, $numbers);
+    }
+
+    public function testFiveSumShouldReturnArrayWithAnswerWhenSolved()
+    {
+        $amount = 5;
+        $target = 178;
+        $numbers = [159, 3, 40, 10, 20, 5, 80, 1];
+        $expected = [0, 1, 3, 5, 7];
+
+        $multipleSum = new MultipleSum();
+        $actual = $multipleSum->solve($amount, $target, $numbers);
+
+        $this->assertSame($expected, $actual);
+    }
 }
