@@ -1,6 +1,6 @@
 <?php
 
-namespace Edentsai\LeetCode\Exercise001;
+namespace Ansonli\LeetCode\Exercise001;
 
 use InvalidArgumentException;
 

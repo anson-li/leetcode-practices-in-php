@@ -1,9 +1,9 @@
 <?php
 
-namespace Edentsai\LeetCode\Tests\Exercise001;
+namespace Ansonli\LeetCode\Tests\Exercise001;
 
-use Edentsai\LeetCode\Exercise001\TwoSum;
-use Edentsai\LeetCode\Tests\TestCase;
+use Ansonli\LeetCode\Exercise001\TwoSum;
+use Ansonli\LeetCode\Tests\TestCase;
 
 class TwoSumTest extends TestCase
 {

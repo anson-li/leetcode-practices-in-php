@@ -1,6 +1,6 @@
 <?php
 
-namespace Edentsai\LeetCode\Tests;
+namespace Ansonli\LeetCode\Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
