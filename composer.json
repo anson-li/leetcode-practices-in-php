@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Edentsai\\LeetCode\\": "src/"
+            "Ansonli\\LeetCode\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Edentsai\\LeetCode\\Tests\\": "tests/"
+            "Ansonli\\LeetCode\\Tests\\": "tests/"
         }
     }
 }
