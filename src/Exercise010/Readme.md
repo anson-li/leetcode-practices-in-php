@@ -24,11 +24,13 @@
 [Shotput packing algorithm](https://medium.com/the-chain/efficiency-of-the-shotput-packing-algorithm-a690e914d49c)
 [First fit descending](https://en.wikipedia.org/wiki/Bin_packing_problem)
 [pyShipping](https://github.com/hudora/pyShipping/tree/master/pyshipping)
+[Three-dimensional bin packing problem with variable bin height](https://research-repository.griffith.edu.au/bitstream/handle/10072/34843/64978_1.pdf)
 
 # Notes
 * Take into factor length, width, and height, and weight.
 * Take into factor bundles of 1, 3, 5, 10, and bulk trees (all packaged together with no bundling)? Bundles take up less space but have greater weight.
 * Also pass the postal code and return a cleaned postal code via normalizeAndValidate($zipCode), erroring out if invalid zip code and returning a custom exception
+* Has to be fast! And optimal
 
 # Assumptions
 * Selling at least three types of plants for test purposes.
@@ -62,6 +64,10 @@ Improves on FFD for items larger than half a bin by classifying items by size in
     * Proceed backward through those bins that do not contain a medium item. On each: If the two smallest remaining small items do not fit, skip this bin. Otherwise, place the smallest remaining small item and the largest remaining small item that fits.
     * Proceed forward through all bins. If the smallest remaining item of any size class does not fit, skip this bin. Otherwise, place the largest item that fits and stay on this bin.
     * Use FFD to pack the remaining items into new bins.
+
+# Modify MFFD for variable bin size?
+* It's a bit easier to calculate since the largest box will always be cheaper than two boxes in this example. So we can start with the largest box and decrease in size from there.
+* Always start with the largest box and run MFFD. Once the bins have been completely calculated, then reduce the size to the smallest box that can carry the same amount. This ensures that we're getting MFFD-packing algorithmic speeds while also ensuring that speed is not a major constraint (truly optimal calculations can be time intensive - see https://research-repository.griffith.edu.au/bitstream/handle/10072/34843/64978_1.pdf).
 
 # Accouting for human error
 * A machine can pack a package perfectly to specifications, but there's a lot to account for human error, including both suboptimal packing and variable plant growth/sizing. For the purposes of this example, we'll set the human error to 12%.
