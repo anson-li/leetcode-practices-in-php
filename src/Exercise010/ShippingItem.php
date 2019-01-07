@@ -2,6 +2,8 @@
 
 namespace Ansonli\LeetCode\Exercise010;
 
+use AnsonLi\LeetCode\Exercise010\ShippingItem;
+
 class ShippingItem 
 {
   public float length, width, height, weight, boxWidth, boxHeight, dirtBulk, dirtBox;

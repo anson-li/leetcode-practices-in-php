@@ -12,8 +12,15 @@ class ShippingBox
     private float remainingWidth;
     private float remainingHeight;
     private float remainingWeight;
+    private float usedWeight = 0;
+
+    private float volume;
+    private float remainingVolume;
+    private float usedVolume = 0;
 
     private float cost; 
+
+    private storedItems = [];
 
     /** 
      * Constructs a box object for calculating used size, remaining size, and cost.
@@ -32,10 +39,26 @@ class ShippingBox
         $this->cost = $cost;
         $this->weight = $weight;
 
+        $this->volume = $length * $width * $height;
+        $this->remainingVolume = $this->volume;
+
         $this->remainingWidth = $width;
         $this->remainingHeight = $height;
         $this->remainingWeight = $weight;
     }
+
+    function resizeBox(ShippingBox $box) 
+    {
+        $this->length = $box->length;
+        $this->width = $box->width;
+        $this->height = $box->height; 
+        $this->cost = $box->cost;
+        $this->weight = $box->weight;
+
+        $this->volume = $box->length * $box->width * $box->height;
+        $this->remainingVolume = $box->volume - $this->usedVolume;
+        $this->remainingWeight = $box->weight - $this->usedWeight;
+    } 
 
     /** 
      * Fills each box with the width and height (treated as a 2d fill component). Returns a boolean identifying whether or 
@@ -47,14 +70,32 @@ class ShippingBox
      *
      * @return bool 
      */
-    function fillBox(float $length, float $width, float $height) : bool
+    function fillBox(ShippingItem $item, float $volume, float $weight, string $size) : bool
     {
-        if ($this->length < $length || $this->remainingWidth < $width || $this->remainingHeight < $height) {
+        $this->storedItems[] = [
+            'item' => $item,
+            'size' => $size,
+        ];
+        $this->remainingVolume -= $volume;
+        $this->usedVolume += $volume;
+        return true;
+    }
+
+    function canFit($volume, $weight) {
+        if ($this->remainingVolume < $volume || $this->remainingWeight < $weight) {
             return false;
         }
-        $this->remainingWidth -= $width;
-        $this->remainingHeight -= $height;
         return true;
+    }
+
+    function hasMediumItem() : bool
+    {
+        foreach ($this->storedItems[] as $item) {
+            if ($item['size'] === 'medium') {
+                return true;
+            }
+        }
+        return false;
     }
 
     function getVolume() : float
@@ -62,9 +103,19 @@ class ShippingBox
         return ($this->length * $this->width * $this->height);
     }
 
+    function getUsedWeight() : float
+    {
+        return $this->usedWeight;
+    }
+
+    function getUsedVolume() : float 
+    {
+        return $this->usedVolume;
+    }
+
     function getRemainingVolume() : float 
     {
-        return ($this->length * $this->remainingWidth * $this->height);
+        return $this->remainingVolume;
     }
 
     function getCost() : float 
