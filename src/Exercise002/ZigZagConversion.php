@@ -53,3 +53,6 @@ class ZigZagConversion
 		return $solution;
 	}
 }
+
+$zz = new ZigZagConversion();
+echo $zz->convert('PAHNAPLSIIGYIR', 4);
