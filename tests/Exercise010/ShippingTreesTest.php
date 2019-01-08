@@ -13,7 +13,7 @@ class ShippingTreesTest extends TestCase
         return [
             [
                 // Shiping one item id 1 and one item id 2
-                'postalcode' => 'T6G4G6',
+                'zipcode' => '90210',
                 'items' => [1 => 1, 2 => 1],
                 'expected' => 10.00,
             ],
@@ -23,9 +23,9 @@ class ShippingTreesTest extends TestCase
     /**
      * @dataProvider parametersDataProvider
      */
-    public function testShippingTreesConversion(string $postalcode, array $items, string $expected)
+    public function testShippingTreesConversion(string $zipcode, array $items, string $expected)
     {
         $shippingTrees = new ShippingTrees();
-        $this->assertSame($expected, $shippingTrees->solve($items, $postalcode));
+        $this->assertSame($expected, $shippingTrees->solve($items, $zipcode));
     }
 }
