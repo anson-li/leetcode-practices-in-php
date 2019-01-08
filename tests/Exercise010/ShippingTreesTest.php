@@ -12,9 +12,14 @@ class ShippingTreesTest extends TestCase
     {
         return [
             [
-                // Shiping one item id 1 and one item id 2
+                // Shipping one item id 1
                 'zipcode' => '90210',
                 'items' => [1 => 1],
+                'expected' => 10.00,
+            ],
+            [
+                'zipcode' => '90210',
+                'items' => [1 => 1, 2 => 0],
                 'expected' => 10.00,
             ],
         ];
@@ -27,5 +32,24 @@ class ShippingTreesTest extends TestCase
     {
         $shippingTrees = new ShippingTrees();
         $this->assertSame($expected, $shippingTrees->solve($items, $zipcode));
+    }
+
+    public function badZipCodeDataProvider() : array
+    {
+        return [
+                'zipcode' => 'T6K 3S9',
+                'items' => [1 => 1],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider badZipCodeDataProvider
+     * @expectedException \Exception
+     */
+    public function testShippingTreesConversionShouldErrorIfBadZipCode(string $zipcode, array $items)
+    {
+        $shippingTrees = new ShippingTrees();
+        $shippingTrees->solve($items, $zipcode);
     }
 }
