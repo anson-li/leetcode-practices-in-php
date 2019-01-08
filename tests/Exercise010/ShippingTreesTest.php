@@ -14,7 +14,7 @@ class ShippingTreesTest extends TestCase
             [
                 // Shiping one item id 1 and one item id 2
                 'zipcode' => '90210',
-                'items' => [1 => 1, 2 => 1],
+                'items' => [1 => 1],
                 'expected' => 10.00,
             ],
         ];
