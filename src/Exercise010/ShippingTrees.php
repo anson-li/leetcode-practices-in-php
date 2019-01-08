@@ -39,7 +39,7 @@ class ShippingTrees
         $usedBoxes = [];
 
         // Sort boxes descending
-        $boxes = usort($boxes, 'boxComparison');
+        $boxes = usort($boxes, ['ShippingTrees', 'boxComparison']);
         $largestBox = $boxes[count($boxes) - 1];
 
         // Sample item array: 
@@ -72,7 +72,7 @@ class ShippingTrees
         }
 
         // Sort itemMass by volume first - largest to smallest
-        usort($itemMass, 'itemComparison');
+        usort($itemMass, ['ShippingTrees', 'itemComparison']);
        
         // Allot a bin for each large item, ordered largest to smallest.
         foreach ($itemMass as $id => $item) 
@@ -106,7 +106,7 @@ class ShippingTrees
         }
         
         // Proceed backward through those bins that do not contain a medium item. On each: If the two smallest remaining small items do not fit, skip this bin. Otherwise, place the smallest remaining small item and the largest remaining small item that fits.
-        $smallItems = array_values(array_filter($itemMass, 'filterSmall'));
+        $smallItems = array_values(array_filter($itemMass, ['ShippingTrees', 'filterSmall']));
         for ($i = count($usedBoxes) - 1; $i >= 0; $i--) 
         {
             if (!$usedBox->hasMediumItem()) 
@@ -212,7 +212,7 @@ class ShippingTrees
         return false;
     }
 
-    public function filterSmall($item)
+    private static function filterSmall($item)
     {
         return ($item['size'] === 'small');
     }
@@ -220,7 +220,7 @@ class ShippingTrees
     /**
      * Compares items according to volume, descending. 
      */
-    public function itemComparison($a, $b) 
+    private static function itemComparison($a, $b) 
     {
         return $a['volume'] < $b['volume'];
     }
@@ -228,7 +228,7 @@ class ShippingTrees
     /**
      * Compares box according to volume, ascending. 
      */
-    public function boxComparison($a, $b) 
+    private static function boxComparison($a, $b) 
     {
         return $a->getVolume() > $b->getVolume();
     }
