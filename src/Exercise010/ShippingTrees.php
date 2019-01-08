@@ -56,6 +56,11 @@ class ShippingTrees
             {
                 $usedBox = $largestBox;
                 $requiredQuantity = $item['item']->getMaxQuantityPerBox($usedBox->volume, $usedBox->weight);
+
+                if ($requiredQuantity < 1) {
+                    throw new Exception('Unable to fit item in any container.');
+                }
+
                 // Subtract quantity from the previous item bundle
                 $subtractedVolume = $item['item']->calculateMultipleVolume($requiredQuantity);
                 $subtractedWeight = $item['item']->calculateMultipleWeight($requiredQuantity);
