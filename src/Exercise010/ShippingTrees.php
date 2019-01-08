@@ -23,7 +23,7 @@ class ShippingTrees
     public function solve(array $items, string $zipCode) : int
     {
         $zipCodeProcessor = new USAZipCode();
-        $zipCode = $zipCodeProcessor->validateAndProcess($zipCode);
+        $zipCode = $zipCodeProcessor->normalizeAndValidate($zipCode);
         if (!$zipCode) {
             throw new Exception('Invalid postal code, please try again.');
         }
