@@ -4,7 +4,7 @@ namespace Ansonli\LeetCode\Exercise010;
 
 class ShippingBox 
 {
-    private $length, $width, $height, $remainingWidth, $remainingHeight, $remainingWeight, $remainingVolume, $storedItems;
+    private $length, $width, $height, $remainingWeight, $remainingVolume, $storedItems;
     public $usedVolume = 0, $usedWeight = 0, $volume, $weight, $cost;
 
     /** 
@@ -26,9 +26,6 @@ class ShippingBox
 
         $this->volume = $length * $width * $height;
         $this->remainingVolume = $this->volume;
-
-        $this->remainingWidth = $width;
-        $this->remainingHeight = $height;
         $this->remainingWeight = $weight;
 
         $this->storedItems = [];
