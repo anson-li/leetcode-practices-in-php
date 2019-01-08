@@ -8,6 +8,8 @@ use AnsonLi\LeetCode\Exercise010\ShippingItem;
 use Ansonli\LeetCode\Exercise010\USAZipCode;
 use Ansonli\LeetCode\Exercise010\USAZipCodeValidator;
 
+use Exception;
+
 class ShippingTrees
 {
 
