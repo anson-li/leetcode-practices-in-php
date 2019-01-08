@@ -65,7 +65,7 @@ class ShippingTrees
                 $usedBox->fillBox($item['item'], $subtractedVolume, $subtractedWeight, 'large');
                 $usedBoxes[] = $usedBox;
                 // Recalculate remaining size
-                $itemMass[$id]['size'] = $this->calculateItemCategory($item['volume'], $largestBox->getVolume());
+                $itemMass[$id]['size'] = $this->calculateItemCategory($itemMass[$id]['volume'], $largestBox->getVolume());
             }
         }
 
