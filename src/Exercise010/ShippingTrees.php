@@ -189,6 +189,7 @@ class ShippingTrees
                 {
                     $usedBox->resizeBox($boxTemplate);
                     $usedBoxes[$key] = $usedBox;
+                    break;
                 }
             }
         }
