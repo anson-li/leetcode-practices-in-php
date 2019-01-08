@@ -23,7 +23,7 @@ class ShippingTreesTest extends TestCase
     /**
      * @dataProvider parametersDataProvider
      */
-    public function testZigZagConversion(string $string, int $rows, string $expected)
+    public function testZigZagConversion(string $postalcode, array $items, string $expected)
     {
         $zigZagConversion = new ZigZagConversion();
         $this->assertSame($expected, $zigZagConversion->convert($string, $rows));
