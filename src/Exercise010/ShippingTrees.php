@@ -15,7 +15,7 @@ class ShippingTrees
      * @param  string   $zipCode        A zip code to be validated and processed.
      * 
      * @return int        The cost to ship the package containing the items.
-     * @throws Exception  When the postal code is invalid, when the item array is empty, or if an excessive amount of items are presented.
+     * @throws Exception  When the postal code is invalid, or if any (singular) item added is too large for any single container.
      */
     public function solve(array $items, string $zipCode) : float
     {
@@ -33,6 +33,7 @@ class ShippingTrees
             3 => new ShippingBox(22, 18, 18, 25, 19.00),
         ];
         $usedBoxes = [];
+        $remainingItems = [];
 
         // Sort boxes descending
         usort($boxes, [__CLASS__, 'boxComparison']);
@@ -45,15 +46,15 @@ class ShippingTrees
         // [1 => 10, 2 => 2], meaning a quantity of 10 for item 1 and a quantity of 2 for item 2
         foreach ($items as $id => $quantity) {
             if ($quantity > 0) {
-                $itemMass[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->getVolume());
+                $remainingItems[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->getVolume());
             }
         }
 
         // Restructure oversized items presented
-        foreach ($itemMass as $id => $item)
+        foreach ($remainingItems as $id => $item)
         {
             // Break down box into multiple components
-            while ($itemMass[$id]['size'] === 'oversized') 
+            while ($remainingItems[$id]['size'] === 'oversized') 
             {
                 $usedBox = $largestBox;
                 $requiredQuantity = $item['item']->getMaxQuantityPerBox($usedBox->volume, $usedBox->weight);
@@ -65,21 +66,21 @@ class ShippingTrees
                 // Subtract quantity from the previous item bundle
                 $subtractedVolume = $item['item']->calculateMultipleVolume($requiredQuantity);
                 $subtractedWeight = $item['item']->calculateMultipleWeight($requiredQuantity);
-                $itemMass[$id]['volume'] -= $subtractedVolume;
-                $itemMass[$id]['weight'] -= $subtractedWeight;
+                $remainingItems[$id]['volume'] -= $subtractedVolume;
+                $remainingItems[$id]['weight'] -= $subtractedWeight;
                 // Fill box with said quantity 
                 $usedBox->fillBox($item['item'], $subtractedVolume, $subtractedWeight, 'large');
                 $usedBoxes[] = $usedBox;
                 // Recalculate remaining size
-                $itemMass[$id]['size'] = $this->calculateItemCategory($itemMass[$id]['volume'], $largestBox->getVolume());
+                $remainingItems[$id]['size'] = $this->calculateItemCategory($remainingItems[$id]['volume'], $largestBox->getVolume());
             }
         }
 
-        // Sort itemMass by volume first - largest to smallest
-        usort($itemMass, [__CLASS__, 'itemComparison']);
+        // Sort remainingItems by volume first - largest to smallest
+        usort($remainingItems, [__CLASS__, 'itemComparison']);
        
         // Allot a bin for each large item, ordered largest to smallest.
-        foreach ($itemMass as $id => $item) 
+        foreach ($remainingItems as $id => $item) 
         {
             if ($item['size'] === 'large')
             {
@@ -87,7 +88,7 @@ class ShippingTrees
                 if ($usedBox->canFit($item['volume'], $item['weight'])) 
                 {
                     $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
-                    unset($itemMass[$id]);
+                    unset($remainingItems[$id]);
                     $usedBoxes[] = $usedBox;
                 }
             }
@@ -96,21 +97,21 @@ class ShippingTrees
         // Proceed forward through the bins. On each: If the smallest remaining medium item does not fit, skip this bin. Otherwise, place the largest remaining medium item that fits.
         foreach ($usedBoxes as $usedBox)
         {
-            for ($i = count($itemMass) - 1; $i >= 0; $i--) 
+            for ($i = count($remainingItems) - 1; $i >= 0; $i--) 
             {
-                if ($itemMass[$i]['size'] === 'medium') 
+                if ($remainingItems[$i]['size'] === 'medium') 
                 {
                     if ($usedBox->canFit($item['volume'], $item['weight']))
                     {
                         $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
-                        unset($itemMass[$i]);
+                        unset($remainingItems[$i]);
                     } 
                 }
             }
         }
         
         // Proceed backward through those bins that do not contain a medium item. On each: If the two smallest remaining small items do not fit, skip this bin. Otherwise, place the smallest remaining small item and the largest remaining small item that fits.
-        $smallItems = array_values(array_filter($itemMass, [__CLASS__, 'filterSmall']));
+        $smallItems = array_values(array_filter($remainingItems, [__CLASS__, 'filterSmall']));
         for ($i = count($usedBoxes) - 1; $i >= 0; $i--) 
         {
             if (!$usedBox->hasMediumItem() && count($smallItems) >= 2) 
@@ -131,8 +132,8 @@ class ShippingTrees
                             unset($smallItems[$j]);
                             unset($smallItems[count($smallItems) - 1]);
                             // Unset the variables from the larger array
-                            $itemMass = $this->unsetByValue($itemMass, $smallItems[$j]['item'], $smallItems[$j]['volume']);
-                            $itemMass = $this->unsetByValue($itemMass, $smallItems[count($smallItems) - 1]['item'], $smallItems[count($smallItems) - 1]['volume']);
+                            $remainingItems = $this->unsetByValue($remainingItems, $smallItems[$j]['item'], $smallItems[$j]['volume']);
+                            $remainingItems = $this->unsetByValue($remainingItems, $smallItems[count($smallItems) - 1]['item'], $smallItems[count($smallItems) - 1]['volume']);
                             break;
                         }
                     }
@@ -143,21 +144,21 @@ class ShippingTrees
         // Proceed forward through all bins. If the smallest remaining item of any size class does not fit, skip this bin. Otherwise, place the largest item that fits and stay on this bin.
         foreach ($usedBoxes as $usedBox)
         {
-            if ($usedBox->canFit($itemMass[count($itemMass) - 1]['volume'], $itemMass[count($itemMass) - 1]['weight'])) 
+            if ($usedBox->canFit($remainingItems[count($remainingItems) - 1]['volume'], $remainingItems[count($remainingItems) - 1]['weight'])) 
             {
-                foreach ($itemMass as $id => $item) 
+                foreach ($remainingItems as $id => $item) 
                 {
                     if ($usedBox->canFit($item['volume'], $item['weight']))
                     {
                         $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
-                        unset($itemMass[$id]);
+                        unset($remainingItems[$id]);
                     }
                 }
             }
         }
 
         // Use FFD to pack the remaining items into new bins.
-        foreach ($itemMass as $id => $item) 
+        foreach ($remainingItems as $id => $item) 
         {
             $isFilled = false;
             foreach ($usedBoxes as $usedBox)
@@ -165,7 +166,7 @@ class ShippingTrees
                 if ($usedBox->canFit($item['volume'], $item['weight']))
                 {
                     $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
-                    unset($itemMass[$id]);
+                    unset($remainingItems[$id]);
                     $isFilled = true;
                     break;
                 }
@@ -175,7 +176,7 @@ class ShippingTrees
             {
                 $usedBox = $largestBox;
                 $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
-                unset($itemMass[$id]);
+                unset($remainingItems[$id]);
                 $usedBoxes[] = $usedBox;
             }
         }

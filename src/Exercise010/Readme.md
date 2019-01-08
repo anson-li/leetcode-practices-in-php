@@ -72,17 +72,6 @@ Improves on FFD for items larger than half a bin by classifying items by size in
 # Accouting for human error
 * A machine can pack a package perfectly to specifications, but there's a lot to account for human error, including both suboptimal packing and variable plant growth/sizing. For the purposes of this example, we'll set the human error to 12%.
 
-# Packing algorithm
-* For each item:
-  * Identify the quantity of each item that's being sent.
-    * For single items, use length of item + width and height of container. Can override width and height.
-    * For nonbulk multiple items, use length of item + width and height of bundle + 5% for wrapping and error.
-      * Bundle calculation: bundles are always wrapped in a cylindrical fashion. So, need ot find algorithm to solve for wrapping a bundle in a cylinder. Cylinders are pi r^2 * h. 
-    * For bulk items, use length of item * 20% for dirt packing, + width and height of items stacked in a cube fashion + 2cm? for plastic packaging.
-  * For each item, we fill to the largest box first, then if the box is full /then/ we move to the next box. We're going to do the easy thing and separate the packages once packed, so if the box can't add the w + h of the next item then we move to the next largest box, etc. Once we've hit the largest box and it doesn't fit, then we keep the previous box size and we create a new 'box' to hold the new shipment.
-    * This cascades for multiple items - for each item, check if it can be fit into a previous box in the list. If it fits into any box then 'upgrade' that box and insert the item into that box.
-    * This means that the array will have to carry two items - the box size currently used, and the remaining w/h that can be fit into that box.
-
 # Calculations required
 * How to find the cylindrical volume given item w/h
 * How to find the cube volume given item w/h
