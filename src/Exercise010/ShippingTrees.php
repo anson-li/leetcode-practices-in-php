@@ -248,7 +248,7 @@ class ShippingTrees
         ];
         foreach ($itemInformation as $key => $item) 
         {
-            if ($itemInformation[$key] === $id)
+            if ($key === $id)
             {
                 $values['item'] = $itemInformation[$key];
                 if ($quantity === 1)
