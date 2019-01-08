@@ -23,7 +23,7 @@ class ShippingTreesTest extends TestCase
     /**
      * @dataProvider parametersDataProvider
      */
-    public function testShippingTreesConversion(string $zipcode, array $items, string $expected)
+    public function testShippingTreesConversion(string $zipcode, array $items, float $expected)
     {
         $shippingTrees = new ShippingTrees();
         $this->assertSame($expected, $shippingTrees->solve($items, $zipcode));
