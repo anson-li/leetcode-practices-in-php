@@ -11,20 +11,6 @@ use Ansonli\LeetCode\Exercise010\USAZipCodeValidator;
 class ShippingTrees
 {
 
-    private $zipCode = null;
-
-    public $boxes = [
-        // needs to be sorted largest to smallest
-        new ShippingBox(1.0, 1.0, 1.0, 10, 10.00),
-        new ShippingBox(),
-    ];
-
-    public $itemInformation = [
-        0 => new ShippingItem(10, 0.1, 0.2, 4, 4, 0.4, 2.5),
-        1 => new ShippingItem(8, 0.3, 0.1, 5, 5, 0.4, 2.5),
-        2 => new ShippingItem(9, 0.1, 0.1, 3, 3, 0.4, 2.5),
-    ];
-
     /**
      * Calculates the shipping cost of trees provided with iDs and a postal code.
      *
@@ -37,22 +23,54 @@ class ShippingTrees
     public function solve(array $items, string $zipCode) : int
     {
         $zipCodeProcessor = new USAZipCode();
-        $this->zipCode = $zipCodeProcessor->validateAndProcess($zipCode);
-        if (!$this->zipCode) {
+        $zipCode = $zipCodeProcessor->validateAndProcess($zipCode);
+        if (!$zipCode) {
             throw new Exception('Invalid postal code, please try again.');
         }
 
+        // Initialize variables here - future improvement would be to move this to the db to query.
+        $boxes = [
+            0 => new ShippingBox(10, 1.0, 1.0, 10, 10.00),
+            1 => new ShippingBox(12, 1.5, 1.5, 15, 15.00),
+            2 => new ShippingBox(13, 2.0, 2.0, 20, 18.00),
+        ];
+        $itemInformation = [
+            0 => new ShippingItem(10, 0.1, 0.2, 4, 4, 0.4, 2.5),
+            1 => new ShippingItem(8, 0.3, 0.1, 5, 5, 0.4, 2.5),
+            2 => new ShippingItem(9, 0.1, 0.1, 3, 3, 0.4, 2.5),
+        ];
         $usedBoxes = [];
 
         // Sort boxes descending
-        $this->boxes = usort($this->boxes, 'boxComparison');
-        $largestBox = $this->boxes[count($this->boxes) - 1];
+        $boxes = usort($boxes, 'boxComparison');
+        $largestBox = $boxes[count($boxes) - 1];
 
         // Sample item array: 
         // [1 => 10, 2 => 2], meaning a quantity of 10 for item 1 and a quantity of 2 for item 2
         foreach ($items as $id => $quantity) {
             if ($quantity > 0) {
                 $itemMass[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->getVolume());
+            }
+        }
+
+        // Restructure oversized items presented
+        foreach ($itemMass as $id => $item)
+        {
+            // Break down box into multiple components
+            while ($itemMass[$id]['size'] === 'oversized') 
+            {
+                $usedBox = $largestBox;
+                $requiredQuantity = $item['item']->getMaxQuantityPerBox($usedBox->volume, $usedBox->weight);
+                // Subtract quantity from the previous item bundle
+                $subtractedVolume = $item['item']->calculateMultipleVolume($requiredQuantity);
+                $subtractedWeight = $item['item']->calculateMultipleWeight($requiredQuantity);
+                $itemMass[$id]['volume'] -= $subtractedVolume;
+                $itemMass[$id]['weight'] -= $subtractedWeight;
+                // Fill box with said quantity 
+                $usedBox->fillBox($item['item'], $subtractedVolume, $subtractedWeight, 'large');
+                $usedBoxes[] = $usedBox;
+                // Recalculate remaining size
+                $itemMass[$id]['size'] = $this->calculateItemCategory($item['volume'], $largestBox->getVolume());
             }
         }
 
@@ -70,8 +88,6 @@ class ShippingTrees
                     $usedBox->fillBox($item['item'], $item['volume'], $item['weight'], $item['size']);
                     unset($itemMass[$id]);
                     $usedBoxes[] = $usedBox;
-                } else {
-                    // TODO: Add condition if box is too small (use bool)
                 }
             }
         }
@@ -93,7 +109,7 @@ class ShippingTrees
         }
         
         // Proceed backward through those bins that do not contain a medium item. On each: If the two smallest remaining small items do not fit, skip this bin. Otherwise, place the smallest remaining small item and the largest remaining small item that fits.
-        $smallItems = array_values(array_filter($itemMass, 'isSmall'));
+        $smallItems = array_values(array_filter($itemMass, 'filterSmall'));
         for ($i = count($usedBoxes) - 1; $i >= 0; $i--) 
         {
             if (!$usedBox->hasMediumItem()) 
@@ -142,7 +158,7 @@ class ShippingTrees
         // Use FFD to pack the remaining items into new bins.
         foreach ($itemMass as $id => $item) 
         {
-            bool $isFilled = false;
+            $isFilled = false;
             foreach ($usedBoxes as $usedBox)
             {
                 if ($usedBox->canFit($item['volume'], $item['weight']))
@@ -166,9 +182,9 @@ class ShippingTrees
         // Find the 'best match box' for each bin, retrofitting smaller boxes if required
         foreach ($usedBoxes as $key => $usedBox)
         {
-            foreach ($this->boxes as $boxTemplate)
+            foreach ($boxes as $boxTemplate)
             {
-                if ($boxTemplate->canFit($usedBox->getUsedVolume, $usedBox->getUsedWeight)) 
+                if ($boxTemplate->canFit($usedBox->usedVolume, $usedBox->usedWeight)) 
                 {
                     $usedBox->resizeBox($boxTemplate);
                     $usedBoxes[$key] = $usedBox;
@@ -199,7 +215,7 @@ class ShippingTrees
         return false;
     }
 
-    public function isSmall($item)
+    public function filterSmall($item)
     {
         return ($item['size'] === 'small');
     }
@@ -230,14 +246,14 @@ class ShippingTrees
     protected function calculateSizeandWeight(int $id, int $quantity, float $maxBoxVolume) : array
     {
         $values = [];
-        foreach ($this->itemInformation as $key => $item) 
+        foreach ($itemInformation as $key => $item) 
         {
-            if ($this->itemInformation[$key] === $id)
+            if ($itemInformation[$key] === $id)
             {
-                $values['item'] = $this->itemInformation[$key];
+                $values['item'] = $itemInformation[$key];
                 if ($quantity === 1)
                 {
-                    $values['volume'] = $item=>calculateSingleVolume();
+                    $values['volume'] = $item->calculateSingleVolume();
                     $values['weight'] = $item->calculateSingleWeight();
                 } 
                 else
@@ -247,22 +263,26 @@ class ShippingTrees
                 }
             }
         }
-
-        $percentageVolume = $values['volume'] / $maxBoxVolume;
-        if ($percentageVolume > 1) {
-            // requires splitting
-        }
-        if ($percentageVolume > 0.5) {
-            $values['size'] = 'large';
-        } else if ($percentageVolume > 0.333) {
-            $values['size'] = 'medium';
-        } else if ($percentageVolume > 0.166) {
-            $values['size'] = 'small';
-        } else {
-            $values['size'] = 'tiny';
-        }
-
+        $values['size'] = calculateItemCategory($values['volume'], $maxBoxVolume);
         return $values;
+    }
+
+    function calculateItemCategory(float $volume, float $maxBoxVolume) : string
+    {
+        $percentageVolume = $volume / $maxBoxVolume;
+        if ($percentageVolume > 1) {
+            $category = 'oversized';
+        } else if ($percentageVolume > 0.5) {
+            $category = 'large';
+        } else if ($percentageVolume > 0.333) {
+            $category = 'medium';
+        } else if ($percentageVolume > 0.166) {
+            $category = 'small';
+        } else {
+            $category = 'tiny';
+        }
+
+        return $category;
     }
  
 }

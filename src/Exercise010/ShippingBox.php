@@ -4,23 +4,8 @@ namespace Ansonli\LeetCode\Exercise010;
 
 class ShippingBox 
 {
-    private float length;
-    private float width;
-    private float height;
-    private float weight;
-
-    private float remainingWidth;
-    private float remainingHeight;
-    private float remainingWeight;
-    private float usedWeight = 0;
-
-    private float volume;
-    private float remainingVolume;
-    private float usedVolume = 0;
-
-    private float cost; 
-
-    private storedItems = [];
+    private $length, $width, $height, $weight, $remainingWidth, $remainingHeight, $remainingWeight, $remainingVolume, $storedItems;
+    public $usedVolume = 0, $usedWeight = 0, $volume, $cost;
 
     /** 
      * Constructs a box object for calculating used size, remaining size, and cost.
@@ -45,6 +30,8 @@ class ShippingBox
         $this->remainingWidth = $width;
         $this->remainingHeight = $height;
         $this->remainingWeight = $weight;
+
+        $this->storedItems = [];
     }
 
     function resizeBox(ShippingBox $box) 
@@ -90,7 +77,7 @@ class ShippingBox
 
     function hasMediumItem() : bool
     {
-        foreach ($this->storedItems[] as $item) {
+        foreach ($this->storedItems as $item) {
             if ($item['size'] === 'medium') {
                 return true;
             }
@@ -101,26 +88,6 @@ class ShippingBox
     function getVolume() : float
     { 
         return ($this->length * $this->width * $this->height);
-    }
-
-    function getUsedWeight() : float
-    {
-        return $this->usedWeight;
-    }
-
-    function getUsedVolume() : float 
-    {
-        return $this->usedVolume;
-    }
-
-    function getRemainingVolume() : float 
-    {
-        return $this->remainingVolume;
-    }
-
-    function getCost() : float 
-    {
-        return $this->cost;
     }
 
 }

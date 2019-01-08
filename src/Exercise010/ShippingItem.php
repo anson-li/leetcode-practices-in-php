@@ -6,7 +6,7 @@ use AnsonLi\LeetCode\Exercise010\ShippingItem;
 
 class ShippingItem 
 {
-  public float length, width, height, weight, boxWidth, boxHeight, dirtBulk, dirtBox;
+  public $length, $width, $height, $weight, $boxWidth, $boxHeight, $dirtBulk, $dirtBox;
 
   public function __construct(float $length, float $width, float $height, float $weight, float $boxWidth, float $boxHeight, float $dirtBulk, $dirtBox)
   {
@@ -34,8 +34,17 @@ class ShippingItem
 
   public function calculateMultipleVolume(int $quantity) : float
   {
-    // calculate volume by creating a cube out of the saprolings.
+    $volume = ($this->length * $this->width * $this->height) * quantity;
     return $volume;
+  }
+
+  /**
+   * Given an ideal volume or weight for a box, provide a value that fills it to the least of either limit (either using all of the available volume, or all of the available weight).
+   * We use the multiple item calculation, as we already know this will be a bulk order.
+   */
+  public function getMaxQuantityPerBox(float $volume, float $weight) : int
+  {
+    return min(floor($volume / $this->calculateMultipleVolume(1)), floor($weight / $this->calculateMultipleWeight(1)));
   }
 
   public function calculateMultipleWeight(int $quantity) : float
