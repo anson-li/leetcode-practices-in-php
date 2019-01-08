@@ -263,7 +263,7 @@ class ShippingTrees
                 }
             }
         }
-        $values['size'] = calculateItemCategory($values['volume'], $maxBoxVolume);
+        $values['size'] = $this->calculateItemCategory($values['volume'], $maxBoxVolume);
         return $values;
     }
 
