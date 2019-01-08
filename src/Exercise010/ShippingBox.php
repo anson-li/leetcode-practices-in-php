@@ -68,7 +68,8 @@ class ShippingBox
         return true;
     }
 
-    function canFit($volume, $weight) {
+    function canFit($volume, $weight) : bool
+    {
         if ($this->remainingVolume < $volume || $this->remainingWeight < $weight) {
             return false;
         }

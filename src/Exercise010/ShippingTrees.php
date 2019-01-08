@@ -2,12 +2,7 @@
 
 namespace Ansonli\LeetCode\Exercise010;
 
-use AnsonLi\LeetCode\Exercise010\ShippingBox;
-use AnsonLi\LeetCode\Exercise010\ShippingItem;
-
-use Ansonli\LeetCode\Exercise010\USAZipCode;
-use Ansonli\LeetCode\Exercise010\USAZipCodeValidator;
-
+use AnsonLi\LeetCode\Exercise010;
 use Exception;
 
 class ShippingTrees

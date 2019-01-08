@@ -2,7 +2,7 @@
 
 namespace Ansonli\LeetCode\Exercise010;
 
-use AnsonLi\LeetCode\Exercise010\ShippingItem;
+use AnsonLi\LeetCode\Exercise010\ShippingBox;
 
 class ShippingItem 
 {
