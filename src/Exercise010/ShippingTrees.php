@@ -30,6 +30,7 @@ class ShippingTrees
             0 => new ShippingBox(15, 8, 8, 10, 10.00),
             1 => new ShippingBox(18, 10, 10, 15, 15.00),
             2 => new ShippingBox(20, 15, 15, 20, 18.00),
+            3 => new ShippingBox(22, 18, 18, 25, 19.00),
         ];
         $usedBoxes = [];
 
@@ -248,7 +249,7 @@ class ShippingTrees
         $values = [];
         $itemInformation = [
             0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
-            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 5, 5, 0.4, 2.5),
+            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 2, 2, 0.4, 2.5),
             2 => new ShippingItem(9, 0.1, 0.1, 0.1, 3, 3, 0.4, 2.5),
         ];
         foreach ($itemInformation as $key => $item) 
