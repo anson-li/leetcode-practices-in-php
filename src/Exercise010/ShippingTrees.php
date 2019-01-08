@@ -31,11 +31,6 @@ class ShippingTrees
             1 => new ShippingBox(12, 1.5, 1.5, 15, 15.00),
             2 => new ShippingBox(13, 2.0, 2.0, 20, 18.00),
         ];
-        $itemInformation = [
-            0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
-            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 5, 5, 0.4, 2.5),
-            2 => new ShippingItem(9, 0.1, 0.1, 0.1, 3, 3, 0.4, 2.5),
-        ];
         $usedBoxes = [];
 
         // Sort boxes descending
@@ -246,6 +241,11 @@ class ShippingTrees
     protected function calculateSizeandWeight(int $id, int $quantity, float $maxBoxVolume) : array
     {
         $values = [];
+        $itemInformation = [
+            0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
+            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 5, 5, 0.4, 2.5),
+            2 => new ShippingItem(9, 0.1, 0.1, 0.1, 3, 3, 0.4, 2.5),
+        ];
         foreach ($itemInformation as $key => $item) 
         {
             if ($itemInformation[$key] === $id)
