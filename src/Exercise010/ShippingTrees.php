@@ -17,7 +17,7 @@ class ShippingTrees
      * @return int        The cost to ship the package containing the items.
      * @throws Exception  When the postal code is invalid, when the item array is empty, or if an excessive amount of items are presented.
      */
-    public function solve(array $items, string $zipCode) : int
+    public function solve(array $items, string $zipCode) : float
     {
         $zipCodeProcessor = new USAZipCode();
         $zipCode = $zipCodeProcessor->normalizeAndValidate($zipCode);
