@@ -32,9 +32,9 @@ class ShippingTrees
             2 => new ShippingBox(13, 2.0, 2.0, 20, 18.00),
         ];
         $itemInformation = [
-            0 => new ShippingItem(10, 0.1, 0.2, 4, 4, 0.4, 2.5),
-            1 => new ShippingItem(8, 0.3, 0.1, 5, 5, 0.4, 2.5),
-            2 => new ShippingItem(9, 0.1, 0.1, 3, 3, 0.4, 2.5),
+            0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
+            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 5, 5, 0.4, 2.5),
+            2 => new ShippingItem(9, 0.1, 0.1, 0.1, 3, 3, 0.4, 2.5),
         ];
         $usedBoxes = [];
 
