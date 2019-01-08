@@ -25,7 +25,7 @@ class ShippingTreesTest extends TestCase
      */
     public function testZigZagConversion(string $postalcode, array $items, string $expected)
     {
-        $zigZagConversion = new ZigZagConversion();
-        $this->assertSame($expected, $zigZagConversion->convert($string, $rows));
+        $shippingTrees = new ShippingTrees();
+        $this->assertSame($expected, $shippingTrees->solve($string, $rows));
     }
 }
