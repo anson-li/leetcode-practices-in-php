@@ -37,6 +37,7 @@ class ShippingTreesTest extends TestCase
     public function badZipCodeDataProvider() : array
     {
         return [
+            [
                 'zipcode' => 'T6K 3S9',
                 'items' => [1 => 1],
             ],
