@@ -40,7 +40,9 @@ class ShippingTrees
 
         // Sort boxes descending
         $boxes = usort($boxes, [__CLASS__, 'boxComparison']);
-        $largestBox = $boxes[count($boxes) - 1];
+
+        // Gets the largest box - reference: https://stackoverflow.com/questions/3687358/whats-the-best-way-to-get-the-last-element-of-an-array-without-deleting-it
+        $largestBox = array_values(array_slice($boxes, -1))[0];
 
         // Sample item array: 
         // [1 => 10, 2 => 2], meaning a quantity of 10 for item 1 and a quantity of 2 for item 2
