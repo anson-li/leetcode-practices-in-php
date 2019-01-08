@@ -14,7 +14,7 @@ class ShippingBox
      * @param float $width  The width of the box.
      * @param float $height The height of the box.
      * @param float $weight The maximum weight the box can carry.
-     * @param float $cost   The cost of the box for shipping. Not really useful for an E2E project but using for standalone purposes. 
+     * @param float $cost   The cost of the box for shipping. Will be replaced by CanadaPost cost calculations once adapted. 
      */
     function __construct(float $length, float $width, float $height, float $weight, float $cost)
     {
@@ -31,6 +31,12 @@ class ShippingBox
         $this->storedItems = [];
     }
 
+    /**
+     * Resizes the box according to a new box's specifications.
+     * Used when swapping from the largest box to a smaller box after MFFD calculations.
+     *
+     * @param ShippingBox $box The reference box to pull the new values from.
+     */
     function resizeBox(ShippingBox $box) 
     {
         $this->length = $box->length;
@@ -45,7 +51,7 @@ class ShippingBox
     } 
 
     /** 
-     * Fills each box with the width and height (treated as a 2d fill component). Returns a boolean identifying whether or 
+     * Fills each box with the volume and weight of each item. Returns a boolean identifying whether or 
      * not the 'fill' was successful.
      *
      * @param float $length
@@ -62,17 +68,30 @@ class ShippingBox
         ];
         $this->remainingVolume -= $volume;
         $this->usedVolume += $volume;
+
+        $this->remainingWeight -= $weight;
+        $this->usedWeight += $weight;
         return true;
     }
 
-    function canFit($volume, $weight) : bool
+    /** 
+     * Checks whether or not the box can fit the volume and the weight requested.
+     *
+     * @param float $volume
+     * @param float $weight
+     *
+     * @return bool 
+     */
+    function canFit(float $volume, float $weight) : bool
     {
-        if ($this->remainingVolume < $volume || $this->remainingWeight < $weight) {
-            return false;
-        }
-        return true;
+        return ($this->remainingVolume >= $volume && $this->remainingWeight >= $weight);
     }
 
+    /** 
+     * Checks whether or not the box currently contains an item that is of 'medium' size.
+     *
+     * @return bool 
+     */
     function hasMediumItem() : bool
     {
         foreach ($this->storedItems as $item) {
@@ -81,11 +100,6 @@ class ShippingBox
             }
         }
         return false;
-    }
-
-    function getVolume() : float
-    { 
-        return ($this->length * $this->width * $this->height);
     }
 
 }

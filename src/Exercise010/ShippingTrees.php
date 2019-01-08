@@ -9,7 +9,7 @@ class ShippingTrees
 {
 
     /**
-     * Calculates the shipping cost of trees provided with iDs and a postal code.
+     * Calculates the shipping cost of seedlings, when provided with IDs, quantities and a postal code.
      *
      * @param  array    $items          A list of items and their quantities to be calculated.
      * @param  string   $zipCode        A zip code to be validated and processed.
@@ -46,7 +46,7 @@ class ShippingTrees
         // [1 => 10, 2 => 2], meaning a quantity of 10 for item 1 and a quantity of 2 for item 2
         foreach ($items as $id => $quantity) {
             if ($quantity > 0) {
-                $remainingItems[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->getVolume());
+                $remainingItems[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->volume);
             }
         }
 
@@ -72,7 +72,7 @@ class ShippingTrees
                 $usedBox->fillBox($item['item'], $subtractedVolume, $subtractedWeight, 'large');
                 $usedBoxes[] = $usedBox;
                 // Recalculate remaining size
-                $remainingItems[$id]['size'] = $this->calculateItemCategory($remainingItems[$id]['volume'], $largestBox->getVolume());
+                $remainingItems[$id]['size'] = $this->calculateItemCategory($remainingItems[$id]['volume'], $largestBox->volume);
             }
         }
 
@@ -205,6 +205,17 @@ class ShippingTrees
         return $sumCost;
     }
 
+    /**
+     * Unsets $items array by matching two values - the ShippingItem $itemToRemove and $volume. 
+     * The additional check is added for $volume in order to incorporate the edge case of having multiple items with the same ShippingItem id.
+     * TODO: Find a way to avoid the edge case of both volumes being exactly the same (ie. add an unique identifier to the unset val)
+     *
+     * @param  array           $items          A list of items to filter through.
+     * @param  ShippingItem    $itemToRemove   The item to remove from the larger list.
+     * @param  float           $volume         The volume of the item to remove.
+     * 
+     * @return array    The same $items array with the item removed.
+     */
     public function unsetByValue(array $items, ShippingItem $itemToRemove, float $volume) : array
     {
         foreach ($items as $key => $value)
@@ -212,31 +223,9 @@ class ShippingTrees
             if ($value['item'] === $itemToRemove && $value['volume'] === $volume)
             {
                 unset($items[$key]);
-                return true;
             }
         }
-        return false;
-    }
-
-    private static function filterSmall($item)
-    {
-        return ($item['size'] === 'small');
-    }
-
-    /**
-     * Compares items according to volume, descending. 
-     */
-    private static function itemComparison($a, $b) 
-    {
-        return -($a['volume'] <=> $b['volume']);
-    }
-
-    /**
-     * Compares box according to volume, ascending. 
-     */
-    private static function boxComparison($a, $b) 
-    {
-        return ($a->getVolume() <=> $b->getVolume());
+        return $items;
     }
 
     /**
@@ -244,11 +233,16 @@ class ShippingTrees
      * Use a metric to decide what's a 'large item', 'medium item' and 'small item' by identifying volume percentage to the largest box volume
      * TODO: Add DB getter using PDO, add check to see if ID is in the set of itemInformation (currently assumed)
      *
+     * @param int   $id           The ID of the item to reference.
+     * @param int   $quantity     The quantity of the item to be added to the list.
+     * @param float $maxBoxVolume The maximum volume the box can carry. Used for size category calculations.
+     *
      * @return array An array containing the volume and mass.
      */
     protected function calculateSizeandWeight(int $id, int $quantity, float $maxBoxVolume) : array
     {
         $values = [];
+        // Reference list for items available. Future improvement would be to move this to the db to query.
         $itemInformation = [
             0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
             1 => new ShippingItem(8, 0.3, 0.1, 0.1, 2, 2, 0.4, 2.5),
@@ -275,6 +269,9 @@ class ShippingTrees
         return $values;
     }
 
+    /**
+     * Identifies the item category based on how much of the box that item takes up in space.
+     */
     function calculateItemCategory(float $volume, float $maxBoxVolume) : string
     {
         $percentageVolume = $volume / $maxBoxVolume;
@@ -291,6 +288,30 @@ class ShippingTrees
         }
 
         return $category;
+    }
+
+    /**
+     * Used by array_filter to isolate the small items in the shopping cart. 
+     */
+    private static function filterSmall($item)
+    {
+        return ($item['size'] === 'small');
+    }
+
+    /**
+     * Compares items according to volume, descending. 
+     */
+    private static function itemComparison($a, $b) 
+    {
+        return -($a['volume'] <=> $b['volume']);
+    }
+
+    /**
+     * Compares box according to volume, ascending. 
+     */
+    private static function boxComparison($a, $b) 
+    {
+        return ($a->volume <=> $b->volume);
     }
  
 }
