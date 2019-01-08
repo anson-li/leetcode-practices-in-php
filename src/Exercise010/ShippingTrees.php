@@ -39,7 +39,7 @@ class ShippingTrees
         $usedBoxes = [];
 
         // Sort boxes descending
-        $boxes = usort($boxes, ['ShippingTrees', 'boxComparison']);
+        $boxes = usort($boxes, [__CLASS__, 'boxComparison']);
         $largestBox = $boxes[count($boxes) - 1];
 
         // Sample item array: 
@@ -72,7 +72,7 @@ class ShippingTrees
         }
 
         // Sort itemMass by volume first - largest to smallest
-        usort($itemMass, ['ShippingTrees', 'itemComparison']);
+        usort($itemMass, [__CLASS__, 'itemComparison']);
        
         // Allot a bin for each large item, ordered largest to smallest.
         foreach ($itemMass as $id => $item) 
@@ -106,7 +106,7 @@ class ShippingTrees
         }
         
         // Proceed backward through those bins that do not contain a medium item. On each: If the two smallest remaining small items do not fit, skip this bin. Otherwise, place the smallest remaining small item and the largest remaining small item that fits.
-        $smallItems = array_values(array_filter($itemMass, ['ShippingTrees', 'filterSmall']));
+        $smallItems = array_values(array_filter($itemMass, [__CLASS__, 'filterSmall']));
         for ($i = count($usedBoxes) - 1; $i >= 0; $i--) 
         {
             if (!$usedBox->hasMediumItem()) 
