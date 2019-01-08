@@ -4,8 +4,8 @@ namespace Ansonli\LeetCode\Exercise010;
 
 class ShippingBox 
 {
-    private $length, $width, $height, $weight, $remainingWidth, $remainingHeight, $remainingWeight, $remainingVolume, $storedItems;
-    public $usedVolume = 0, $usedWeight = 0, $volume, $cost;
+    private $length, $width, $height, $remainingWidth, $remainingHeight, $remainingWeight, $remainingVolume, $storedItems;
+    public $usedVolume = 0, $usedWeight = 0, $volume, $weight, $cost;
 
     /** 
      * Constructs a box object for calculating used size, remaining size, and cost.
