@@ -107,7 +107,7 @@ class ShippingTrees
         $smallItems = array_values(array_filter($itemMass, [__CLASS__, 'filterSmall']));
         for ($i = count($usedBoxes) - 1; $i >= 0; $i--) 
         {
-            if (!$usedBox->hasMediumItem()) 
+            if (!$usedBox->hasMediumItem() && count($smallItems) >= 2) 
             {
                 // Check that the two smallest remaining small items fit
                 $minimumRequiredVolume = $smallItems[count($smallItems) - 1]['volume'] + $smallItems[count($smallItems) - 2]['volume'];
