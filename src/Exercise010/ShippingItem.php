@@ -34,7 +34,7 @@ class ShippingItem
 
   public function calculateMultipleVolume(int $quantity) : float
   {
-    $volume = ($this->length * $this->width * $this->height) * quantity;
+    $volume = ($this->length * $this->width * $this->height) * $quantity;
     return $volume;
   }
 
