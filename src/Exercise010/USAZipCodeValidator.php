@@ -1,5 +1,7 @@
 <?php
 
+namespace Ansonli\LeetCode\Exercise010;
+
 class USAZipCodeValidator
 {
     /**
