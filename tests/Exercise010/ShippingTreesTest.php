@@ -26,6 +26,6 @@ class ShippingTreesTest extends TestCase
     public function testShippingTreesConversion(string $postalcode, array $items, string $expected)
     {
         $shippingTrees = new ShippingTrees();
-        $this->assertSame($expected, $shippingTrees->solve($postalcode, $items));
+        $this->assertSame($expected, $shippingTrees->solve($items, $postalcode));
     }
 }
