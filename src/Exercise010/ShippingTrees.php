@@ -27,7 +27,7 @@ class ShippingTrees
 
         // Initialize variables here - future improvement would be to move this to the db to query.
         $boxes = [
-            0 => new ShippingBox(15, 5, 5, 10, 10.00),
+            0 => new ShippingBox(15, 8, 8, 10, 10.00),
             1 => new ShippingBox(18, 10, 10, 15, 15.00),
             2 => new ShippingBox(20, 15, 15, 20, 18.00),
         ];
