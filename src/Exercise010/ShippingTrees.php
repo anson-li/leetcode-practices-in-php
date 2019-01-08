@@ -225,7 +225,7 @@ class ShippingTrees
      */
     private static function itemComparison($a, $b) 
     {
-        return $a['volume'] > $b['volume'];
+        return -($a['volume'] <=> $b['volume']);
     }
 
     /**
@@ -233,7 +233,7 @@ class ShippingTrees
      */
     private static function boxComparison($a, $b) 
     {
-        return $a->getVolume() < $b->getVolume();
+        return ($a->getVolume() <=> $b->getVolume());
     }
 
     /**
