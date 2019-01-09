@@ -299,7 +299,7 @@ class ShippingTrees
     }
 
     /**
-     * Compares items according to volume, descending. 
+     * Used by usort to compare items according to volume, descending. 
      */
     private static function itemComparison($a, $b) 
     {
@@ -307,7 +307,7 @@ class ShippingTrees
     }
 
     /**
-     * Compares box according to volume, ascending. 
+     * Used by usort to compare boxes according to volume, ascending. 
      */
     private static function boxComparison($a, $b) 
     {
