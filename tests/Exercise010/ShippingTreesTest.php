@@ -33,7 +33,7 @@ class ShippingTreesTest extends TestCase
                 // Testing an oversized single item
                 'zipcode' => '90210',
                 'items' => [1 => 1000],
-                'expected' => [10.00],
+                'expected' => 10.00,
             ],
             [
                 // Testing multiple large items
@@ -47,7 +47,7 @@ class ShippingTreesTest extends TestCase
     /**
      * @dataProvider parametersDataProvider
      */
-    public function testShippingTrees(string $zipcode, array $items, array $expected)
+    public function testShippingTrees(string $zipcode, array $items, float $expected)
     {
         $shippingTrees = new ShippingTrees();
         $this->assertSame($expected, $shippingTrees->solve($items, $zipcode));
