@@ -27,10 +27,10 @@ class ShippingTrees
 
         // Initialize variables here - future improvement would be to move this to the db to query.
         $boxes = [
-            0 => new ShippingBox(15, 8, 8, 10, 10.00),
-            1 => new ShippingBox(18, 10, 10, 15, 15.00),
-            2 => new ShippingBox(20, 15, 15, 20, 18.00),
-            3 => new ShippingBox(22, 18, 18, 25, 19.00),
+            0 => new ShippingBox(15, 2, 2, 10, 10.00),
+            1 => new ShippingBox(18, 2, 2, 15, 15.00),
+            2 => new ShippingBox(20, 3, 3, 20, 18.00),
+            3 => new ShippingBox(22, 3, 3, 25, 19.00),
         ];
         $usedBoxes = [];
         $remainingItems = [];
@@ -250,9 +250,9 @@ class ShippingTrees
         $values = [];
         // Reference list for items available. Future improvement would be to move this to the db to query.
         $itemInformation = [
-            0 => new ShippingItem(10, 0.1, 0.2, 0.1, 4, 4, 0.4, 2.5),
-            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 2, 2, 0.4, 2.5),
-            2 => new ShippingItem(9, 0.1, 0.1, 0.1, 3, 3, 0.4, 2.5),
+            0 => new ShippingItem(10, 0.1, 0.2, 0.1, 0.4, 0.4, 0.4, 2.5),
+            1 => new ShippingItem(8, 0.3, 0.1, 0.1, 0.5, 0.5, 0.4, 2.5),
+            2 => new ShippingItem(9, 0.1, 0.1, 0.1, 0.6, 0.6, 0.4, 2.5),
         ];
         foreach ($itemInformation as $key => $item) 
         {
