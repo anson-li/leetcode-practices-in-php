@@ -65,8 +65,11 @@ class ShippingTrees
                 {
                     throw new Exception('Unable to fit item in any container.');
                 }
-                fwrite(STDERR, print_r($requiredQuantity, TRUE));
-                fwrite(STDERR, print_r($remainingItems[$id], TRUE));
+                echo 'Hi';
+                echo print_r($requiredQuantity, 1);
+                echo print_r($remainingItems[$id], 1);
+                echo '---';
+
                 // Subtract quantity from the previous item bundle
                 $subtractedVolume = $item['item']->calculateMultipleVolume($requiredQuantity);
                 $subtractedWeight = $item['item']->calculateMultipleWeight($requiredQuantity);
