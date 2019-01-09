@@ -58,7 +58,6 @@ class ShippingTrees
             // Break down box into multiple components
             while ($remainingItems[$id]['size'] === 'oversized') 
             {
-                throw new Exception('Hit oversized');
                 $usedBox = $largestBox;
                 $requiredQuantity = $item['item']->getMaxQuantityPerBox($usedBox->volume, $usedBox->weight);
 
