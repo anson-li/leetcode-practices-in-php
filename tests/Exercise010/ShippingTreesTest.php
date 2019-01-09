@@ -24,8 +24,21 @@ class ShippingTreesTest extends TestCase
                 'expected' => 10.00,
             ],
             [
+                // Testing multiple items
                 'zipcode' => '90210',
                 'items' => [1 => 1, 2 => 1],
+                'expected' => 10.00,
+            ],
+            [
+                // Testing an oversized single item
+                'zipcode' => '90210',
+                'items' => [1 => 50],
+                'expected' => 10.00,
+            ],
+            [
+                // Testing multiple large items
+                'zipcode' => '90210',
+                'items' => [0 => 20, 1 => 20, 2 => 20],
                 'expected' => 10.00,
             ],
         ];
