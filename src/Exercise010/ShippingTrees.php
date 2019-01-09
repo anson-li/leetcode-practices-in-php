@@ -44,8 +44,10 @@ class ShippingTrees
 
         // Sample item array: 
         // [1 => 10, 2 => 2], meaning a quantity of 10 for item 1 and a quantity of 2 for item 2
-        foreach ($items as $id => $quantity) {
-            if ($quantity > 0) {
+        foreach ($items as $id => $quantity) 
+        {
+            if ($quantity > 0) 
+            {
                 $remainingItems[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->volume);
             }
         }
@@ -59,7 +61,8 @@ class ShippingTrees
                 $usedBox = $largestBox;
                 $requiredQuantity = $item['item']->getMaxQuantityPerBox($usedBox->volume, $usedBox->weight);
 
-                if ($requiredQuantity < 1) {
+                if ($requiredQuantity < 1) 
+                {
                     throw new Exception('Unable to fit item in any container.');
                 }
 
@@ -125,7 +128,8 @@ class ShippingTrees
                     {
                         $volume = $smallItems[count($smallItems) - 1]['volume'] + $smallItems[$j]['volume'];
                         $weight = $smallItems[count($smallItems) - 1]['weight'] + $smallItems[$j]['weight'];
-                        if ($usedBox->canFit($volume, $weight)) {
+                        if ($usedBox->canFit($volume, $weight)) 
+                        {
                             $usedBox->fillBox($smallItems[$j]['item'], $smallItems[$j]['volume'], $smallItems[$j]['weight'], $smallItems[$j]['size']);
                             $usedBox->fillBox($smallItems[count($smallItems) - 1]['item'], $smallItems[count($smallItems) - 1]['volume'], $smallItems[count($smallItems) - 1]['weight'], $smallItems[count($smallItems) - 1]['size']);
                             // Unset the variables from the smaller array
@@ -286,7 +290,6 @@ class ShippingTrees
         } else {
             $category = 'tiny';
         }
-
         return $category;
     }
 
