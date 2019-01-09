@@ -32,14 +32,14 @@ class ShippingTreesTest extends TestCase
             [
                 // Testing an oversized single item
                 'zipcode' => '90210',
-                'items' => [1 => 50],
+                'items' => [1 => 200],
                 'expected' => 10.00,
             ],
             [
                 // Testing multiple large items
                 'zipcode' => '90210',
                 'items' => [0 => 20, 1 => 20, 2 => 20],
-                'expected' => 10.00,
+                'expected' => 38.00,
             ],
         ];
     }
