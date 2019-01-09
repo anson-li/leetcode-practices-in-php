@@ -47,7 +47,7 @@ class ShippingTreesTest extends TestCase
     /**
      * @dataProvider parametersDataProvider
      */
-    public function testShippingTreesConversion(string $zipcode, array $items, float $expected)
+    public function testShippingTrees(string $zipcode, array $items, float $expected)
     {
         $shippingTrees = new ShippingTrees();
         $this->assertSame($expected, $shippingTrees->solve($items, $zipcode));
@@ -67,7 +67,7 @@ class ShippingTreesTest extends TestCase
      * @dataProvider badZipCodeDataProvider
      * @expectedException \Exception
      */
-    public function testShippingTreesConversionShouldErrorIfBadZipCode(string $zipcode, array $items)
+    public function testShippingTreesShouldErrorIfBadZipCode(string $zipcode, array $items)
     {
         $shippingTrees = new ShippingTrees();
         $shippingTrees->solve($items, $zipcode);
