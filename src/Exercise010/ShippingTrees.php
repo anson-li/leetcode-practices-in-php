@@ -48,6 +48,7 @@ class ShippingTrees
         {
             if ($quantity > 0) 
             {
+                return $quantity;
                 $remainingItems[$id] = $this->calculateSizeandWeight($id, $quantity, $largestBox->volume);
             }
         }
