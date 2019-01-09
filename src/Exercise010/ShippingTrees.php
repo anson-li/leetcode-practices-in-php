@@ -35,7 +35,7 @@ class ShippingTrees
         $usedBoxes = [];
         $remainingItems = [];
 
-        // Sort boxes descending
+        // Sort boxes ascending
         usort($boxes, [__CLASS__, 'boxComparison']);
 
         // Gets the largest box - reference: https://stackoverflow.com/a/41795859
