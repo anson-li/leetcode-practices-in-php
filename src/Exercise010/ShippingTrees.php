@@ -52,8 +52,6 @@ class ShippingTrees
             }
         }
 
-        return $remainingItems;
-
         // Restructure oversized items presented
         foreach ($remainingItems as $id => $item)
         {
